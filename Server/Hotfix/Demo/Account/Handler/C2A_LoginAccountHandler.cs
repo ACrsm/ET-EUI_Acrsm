@@ -43,6 +43,7 @@ namespace ET
                 return;
             }
    
+            /*
             if (!Regex.IsMatch(request.Password.Trim(),@"^[A-Za-z0-9]+$"))
             {
                 response.Error = ErrorCode.ERR_PasswordFormError;
@@ -50,6 +51,7 @@ namespace ET
                 session.Disconnect().Coroutine();
                 return;
             }
+            */
 
             using (session.AddComponent<SessionLockingComponent>())
             {

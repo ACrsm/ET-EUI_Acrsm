@@ -21,5 +21,6 @@ namespace ET
         public const int ERR_AccountIsInBlackList = 200006;
         public const int ERR_LoginPasswordError = 200007;
         public const int ERR_RequestRepeatedly = 200008;
+        public const int ERR_TokenError = 200009;
     }
 }

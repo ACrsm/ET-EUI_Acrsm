@@ -353,7 +353,7 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(L2A_LoginAccountResponse))]
+	[ResponseType(nameof(G2L_DisconnectGateUnit))]
 	[Message(InnerOpcode.L2G_DisconnectGateUnit)]
 	[ProtoContract]
 	public partial class L2G_DisconnectGateUnit: Object, IActorRequest
