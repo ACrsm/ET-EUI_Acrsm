@@ -255,4 +255,9 @@ message A2C_LoginAccount // IResponse
 	string Token = 1; //令牌
 	int64 AccountId = 2; //这一次登录的身份证号码, 就是服务器端Account的实体Id
 }
+
+message A2C_Disconnect // IMessage
+{
+	int32 Error = 1;
+}
  

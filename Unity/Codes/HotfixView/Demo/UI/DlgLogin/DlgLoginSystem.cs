@@ -37,6 +37,8 @@ namespace ET
 				}
 			
 				//显示正常的页面
+				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
+				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
 			}
 			catch (Exception e)
 			{
