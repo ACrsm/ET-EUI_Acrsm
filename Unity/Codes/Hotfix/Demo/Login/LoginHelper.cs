@@ -4,6 +4,8 @@ using System;
 namespace ET
 {
     [FriendClass(typeof(AccountInfoComponent))]
+    [FriendClass(typeof(ServerInfosComponent))]
+    [FriendClass(typeof(RoleInfosComponent))]
     public static class LoginHelper
     {
         public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
@@ -81,7 +83,7 @@ namespace ET
                             AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
                             Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
                             Name = name,
-                            ServerId = 1,
+                            ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
                         });
 
             }
@@ -96,7 +98,10 @@ namespace ET
                 Log.Error(a2CCreateRole.Error.ToString());
                 return a2CCreateRole.Error;
             }
-                
+
+            RoleInfo newRoleInfo = zoneScene.GetComponent<RoleInfosComponent>().AddChild<RoleInfo>();
+            newRoleInfo.FromMessage(a2CCreateRole.RoleInfo);
+            zoneScene.GetComponent<RoleInfosComponent>().RoleInfos.Add(newRoleInfo);
             
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;

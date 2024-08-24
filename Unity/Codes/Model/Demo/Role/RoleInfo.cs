@@ -6,6 +6,7 @@ namespace ET
         Freeze,
     }
     
+    
     public class RoleInfo : Entity, IAwake
     {
         public string Name;
