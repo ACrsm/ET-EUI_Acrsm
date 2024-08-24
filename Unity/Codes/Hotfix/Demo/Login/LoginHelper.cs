@@ -106,5 +106,72 @@ namespace ET
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }
+
+        public static async ETTask<int> GetRoles(Scene zoneScene)
+        {
+            A2C_GetRoles a2CGetRoles = null;
+            try
+            {
+                a2CGetRoles = (A2C_GetRoles)await zoneScene.GetComponent<SessionComponent>().Session.Call(
+                    new C2A_GetRoles()
+                    {
+                        AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                        Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                        ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
+                    });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                return ErrorCode.ERR_NetworkError;
+            }
+
+            if (a2CGetRoles.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(a2CGetRoles.Error.ToString());
+                return a2CGetRoles.Error;
+            }
+            
+            zoneScene.GetComponent<RoleInfosComponent>().RoleInfos.Clear();
+            foreach (var roleInfoProto in a2CGetRoles.RoleInfo)
+            {
+                RoleInfo roleInfo = zoneScene.GetComponent<RoleInfosComponent>().AddChild<RoleInfo>();
+                roleInfo.FromMessage(roleInfoProto);
+                zoneScene.GetComponent<RoleInfosComponent>().RoleInfos.Add(roleInfo);
+            }
+            
+            return ErrorCode.ERR_Success;
+        }
+
+        public static async ETTask<int> DeleteRole(Scene zoneScene)
+        {
+            A2C_DeleteRole a2CDeleteRole = null;
+            try
+            {
+                a2CDeleteRole = (A2C_DeleteRole) await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_DeleteRole()
+                {
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                    RoleInfoId = zoneScene.GetComponent<RoleInfosComponent>().CurrentRoleId,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
+                });
+
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                return ErrorCode.ERR_NetworkError;
+            }
+
+            if (a2CDeleteRole.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(a2CDeleteRole.Error.ToString());
+                return a2CDeleteRole.Error;
+            }
+
+            int index = zoneScene.GetComponent<RoleInfosComponent>().RoleInfos.FindIndex(info => info.Id==a2CDeleteRole.DeleteRoleInfoId);
+            zoneScene.GetComponent<RoleInfosComponent>().RoleInfos.RemoveAt(index);
+            return ErrorCode.ERR_Success;
+        }
     }
 }
